@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>BiznesBot.pl – Chatbot NAVI</title>
+    <script src="/static/chatbot.js" defer></script>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+        #chatbox { background: white; padding: 15px; border-radius: 8px; max-width: 600px; margin-bottom: 15px; }
+        input, button { padding: 10px; font-size: 16px; }
+        #userInput { width: 70%; }
+    </style>
+</head>
+<body>
+    <h1>Witaj na BiznesBot.pl</h1>
+    <div id="chatbox"></div>
+    <input id="userInput" placeholder="Zadaj pytanie..." />
+    <button onclick="sendMessage()">Wyślij</button>
+</body>
+</html>
