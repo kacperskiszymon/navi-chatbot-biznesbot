@@ -1,9 +1,33 @@
 from flask import Flask, request, render_template, jsonify
 import openai
 import os
+import re
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Funkcja wykrywająca e-mail lub numer telefonu
+def is_email_or_phone(text):
+    email_pattern = r"[\w\.-]+@[\w\.-]+\.\w+"
+    phone_pattern = r"\b\d{9,12}\b"
+    return re.search(email_pattern, text) or re.search(phone_pattern, text)
+
+# Funkcja wysyłająca powiadomienie e-mail do właściciela
+def send_email_notification(client_info):
+    msg = EmailMessage()
+    msg.set_content(f"Nowe zapytanie od klienta NAVI:\n\n{client_info}")
+    msg["Subject"] = "BiznesBot – Nowy klient z NAVI"
+    msg["From"] = os.getenv("SMTP_EMAIL")
+    msg["To"] = os.getenv("OWNER_EMAIL")
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(os.getenv("SMTP_EMAIL"), os.getenv("SMTP_PASS"))
+            smtp.send_message(msg)
+    except Exception as e:
+        print(f"Błąd wysyłania e-maila: {str(e)}")
 
 @app.route("/")
 def index():
@@ -12,6 +36,11 @@ def index():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json["message"]
+
+    # Jeśli klient poda kontakt – wyślij e-mail
+    if is_email_or_phone(user_message):
+        send_email_notification(user_message)
+
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
