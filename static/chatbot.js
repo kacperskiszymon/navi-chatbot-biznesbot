@@ -1,11 +1,30 @@
-// Funkcja wysyłająca wiadomość do API
+let inactivityTimeout;
+
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimeout);
+    inactivityTimeout = setTimeout(() => {
+        document.getElementById("chat-container").classList.add("hidden");
+    }, 180000); // 3 minuty
+}
+
+function showChat() {
+    document.getElementById("chat-container").classList.remove("hidden");
+    resetInactivityTimer();
+}
+
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
     if (!message) return;
 
     const chatbox = document.getElementById("chatbox");
-    chatbox.innerHTML += `<p><b>Ty:</b> ${message}</p>`;
+
+    // Dodanie dymku użytkownika
+    const userBubble = document.createElement("div");
+    userBubble.className = "bubble user-bubble";
+    userBubble.textContent = message;
+    chatbox.appendChild(userBubble);
+
     input.value = "";
 
     try {
@@ -16,21 +35,37 @@ async function sendMessage() {
         });
 
         const data = await response.json();
-        chatbox.innerHTML += `<p><b>NAVI:</b> ${data.reply}</p>`;
+
+        // Dodanie dymku NAVI
+        const botBubble = document.createElement("div");
+        botBubble.className = "bubble bot-bubble";
+        botBubble.textContent = data.reply;
+        chatbox.appendChild(botBubble);
     } catch (error) {
-        chatbox.innerHTML += `<p style="color:red;"><b>Błąd:</b> Nie udało się połączyć z NAVI.</p>`;
+        const errorBubble = document.createElement("div");
+        errorBubble.className = "bubble bot-bubble";
+        errorBubble.style.color = "red";
+        errorBubble.textContent = "Błąd połączenia z NAVI.";
+        chatbox.appendChild(errorBubble);
     }
 
     chatbox.scrollTop = chatbox.scrollHeight;
+    resetInactivityTimer();
 }
 
-// Powitanie po załadowaniu strony
+// Powitanie
 window.onload = function () {
     const chatbox = document.getElementById("chatbox");
-    chatbox.innerHTML += `<p><b>NAVI:</b> Cześć! Jestem NAVI, wirtualny asystent BiznesBot.pl. Jak mogę Ci pomóc?</p>`;
+
+    const welcome = document.createElement("div");
+    welcome.className = "bubble bot-bubble";
+    welcome.textContent = "Cześć! Jestem NAVI – wirtualny asystent BiznesBot.pl. Jak mogę Ci pomóc?";
+    chatbox.appendChild(welcome);
+
+    showChat();
 };
 
-// Obsługa klawisza Enter
+// Obsługa Enter
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.getElementById("userInput");
     input.addEventListener("keypress", function (e) {
@@ -38,4 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sendMessage();
         }
     });
+
+    // Każde kliknięcie na stronie przywraca czat
+    document.body.addEventListener("click", showChat);
 });

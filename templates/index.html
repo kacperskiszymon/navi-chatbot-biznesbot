@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <title>BiznesBot.pl – Chatbot NAVI</title>
     <script src="/static/chatbot.js" defer></script>
-    
-    <!-- Nowoczesna czcionka Inter z Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             padding: 20px;
             background: #f0f2f5;
         }
+
         #chatbox {
             background: #ffffff;
             padding: 15px;
@@ -25,6 +24,30 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             font-size: 15px;
         }
+
+        .bubble {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 20px;
+            margin: 8px 0;
+            display: inline-block;
+            clear: both;
+            line-height: 1.4;
+        }
+
+        .user-bubble {
+            background-color: #007bff;
+            color: white;
+            float: right;
+            text-align: right;
+        }
+
+        .bot-bubble {
+            background-color: #e9ecef;
+            color: #000;
+            float: left;
+        }
+
         input, button {
             padding: 10px;
             font-size: 16px;
@@ -32,24 +55,33 @@
             border-radius: 6px;
             font-family: 'Inter', sans-serif;
         }
+
         #userInput {
             width: 70%;
         }
+
         button {
             background-color: #007bff;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #0056b3;
+        }
+
+        #chat-container.hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <h1>Witaj na BiznesBot.pl</h1>
-    <div id="chatbox"></div>
-    <input id="userInput" placeholder="Zadaj pytanie..." />
-    <button onclick="sendMessage()">Wyślij</button>
+    <div id="chat-container">
+        <div id="chatbox"></div>
+        <input id="userInput" placeholder="Zadaj pytanie..." />
+        <button onclick="sendMessage()">Wyślij</button>
+    </div>
 </body>
 </html>
