@@ -38,15 +38,26 @@ function sendMessage() {
 
 function toggleChat() {
     const chat = document.getElementById("chat-wrapper");
-    chat.style.display = chat.style.display === "none" ? "flex" : "none";
+
+    if (chat.style.visibility === "visible") {
+        chat.style.visibility = "hidden";
+        chat.style.display = "none";
+    } else {
+        chat.style.visibility = "visible";
+        chat.style.display = "flex";
+    }
 }
 
 window.onload = function () {
     const chatbox = document.getElementById("chatbox");
+
     const welcome = document.createElement("div");
     welcome.className = "bubble bot-bubble";
     welcome.textContent = "Cześć! Jestem NAVI – asystent BiznesBot.pl. W czym mogę pomóc?";
     chatbox.appendChild(welcome);
+
+    document.getElementById("chat-wrapper").style.visibility = "hidden";
+    document.getElementById("chat-wrapper").style.display = "none";
 
     document.getElementById("chat-toggle").addEventListener("click", toggleChat);
     document.getElementById("userInput").addEventListener("keypress", function (e) {
