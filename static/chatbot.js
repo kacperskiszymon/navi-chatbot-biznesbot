@@ -1,17 +1,3 @@
-let inactivityTimeout;
-
-function resetInactivityTimer() {
-    clearTimeout(inactivityTimeout);
-    inactivityTimeout = setTimeout(() => {
-        document.getElementById("chat-container").classList.add("hidden");
-    }, 180000); // 3 minuty
-}
-
-function showChat() {
-    document.getElementById("chat-container").classList.remove("hidden");
-    resetInactivityTimer();
-}
-
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
@@ -19,7 +5,7 @@ async function sendMessage() {
 
     const chatbox = document.getElementById("chatbox");
 
-    // Dodanie dymku użytkownika
+    // Dymek użytkownika
     const userBubble = document.createElement("div");
     userBubble.className = "bubble user-bubble";
     userBubble.textContent = message;
@@ -36,7 +22,7 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        // Dodanie dymku NAVI
+        // Dymek NAVI
         const botBubble = document.createElement("div");
         botBubble.className = "bubble bot-bubble";
         botBubble.textContent = data.reply;
@@ -50,7 +36,6 @@ async function sendMessage() {
     }
 
     chatbox.scrollTop = chatbox.scrollHeight;
-    resetInactivityTimer();
 }
 
 // Powitanie
@@ -61,8 +46,6 @@ window.onload = function () {
     welcome.className = "bubble bot-bubble";
     welcome.textContent = "Cześć! Jestem NAVI – wirtualny asystent BiznesBot.pl. Jak mogę Ci pomóc?";
     chatbox.appendChild(welcome);
-
-    showChat();
 };
 
 // Obsługa Enter
@@ -73,7 +56,4 @@ document.addEventListener("DOMContentLoaded", function () {
             sendMessage();
         }
     });
-
-    // Każde kliknięcie na stronie przywraca czat
-    document.body.addEventListener("click", showChat);
 });
