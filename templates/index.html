@@ -8,47 +8,19 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #f0f2f5;
+            padding: 20px;
             margin: 0;
-        }
-
-        #chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #007bff;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            color: white;
-            font-size: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-        }
-
-        #chat-container {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            width: 360px;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 9999;
+            background: #f0f2f5;
         }
 
         #chatbox {
+            background: #ffffff;
             padding: 15px;
+            border-radius: 10px;
+            max-width: 100%;
             height: 400px;
             overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             font-size: 15px;
         }
 
@@ -75,6 +47,18 @@
             float: left;
         }
 
+        #chat-wrapper {
+            width: 360px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 9999;
+        }
+
         #input-area {
             display: flex;
             border-top: 1px solid #ddd;
@@ -83,53 +67,35 @@
         }
 
         input, button {
-            font-family: 'Inter', sans-serif;
             padding: 10px;
             font-size: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
+            font-family: 'Inter', sans-serif;
         }
 
         #userInput {
             flex-grow: 1;
         }
 
-        #minimize-btn, #clear-btn {
-            font-size: 12px;
-            background-color: #f8f9fa;
-            color: #333;
-            border: 1px solid #ccc;
-            padding: 6px 10px;
-            margin: 5px;
+        button {
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
         }
 
-        #button-bar {
-            text-align: right;
-            border-top: 1px solid #eee;
-            padding: 5px;
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-
-    <!-- Pływający przycisk czatu -->
-    <button id="chat-toggle">💬</button>
-
-    <!-- Okno czatu -->
-    <div id="chat-container">
+    <div id="chat-wrapper">
         <div id="chatbox"></div>
-
         <div id="input-area">
             <input id="userInput" placeholder="Zadaj pytanie..." />
             <button onclick="sendMessage()">Wyślij</button>
         </div>
-
-        <div id="button-bar">
-            <button id="clear-btn" onclick="clearChat()">Wyczyść</button>
-            <button id="minimize-btn">Zamknij</button>
-        </div>
     </div>
-
 </body>
 </html>
