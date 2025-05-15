@@ -1,4 +1,4 @@
-async function sendMessage() {
+function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
     if (!message) return;
@@ -12,31 +12,35 @@ async function sendMessage() {
 
     input.value = "";
 
-    try {
-        const response = await fetch("/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message })
+    fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            const botBubble = document.createElement("div");
+            botBubble.className = "bubble bot-bubble";
+            botBubble.textContent = data.reply;
+            chatbox.appendChild(botBubble);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        })
+        .catch(() => {
+            const errorBubble = document.createElement("div");
+            errorBubble.className = "bubble bot-bubble";
+            errorBubble.style.color = "red";
+            errorBubble.textContent = "Błąd połączenia z NAVI.";
+            chatbox.appendChild(errorBubble);
         });
-
-        const data = await response.json();
-
-        const botBubble = document.createElement("div");
-        botBubble.className = "bubble bot-bubble";
-        botBubble.textContent = data.reply;
-        chatbox.appendChild(botBubble);
-    } catch (error) {
-        const errorBubble = document.createElement("div");
-        errorBubble.className = "bubble bot-bubble";
-        errorBubble.style.color = "red";
-        errorBubble.textContent = "Błąd połączenia z NAVI.";
-        chatbox.appendChild(errorBubble);
-    }
 
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-// Powitanie
+function toggleChat() {
+    const chat = document.getElementById("chat-wrapper");
+    chat.style.display = chat.style.display === "none" ? "flex" : "none";
+}
+
 window.onload = function () {
     const chatbox = document.getElementById("chatbox");
     const welcome = document.createElement("div");
@@ -44,6 +48,7 @@ window.onload = function () {
     welcome.textContent = "Cześć! Jestem NAVI – asystent BiznesBot.pl. W czym mogę pomóc?";
     chatbox.appendChild(welcome);
 
+    document.getElementById("chat-toggle").addEventListener("click", toggleChat);
     document.getElementById("userInput").addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
             sendMessage();

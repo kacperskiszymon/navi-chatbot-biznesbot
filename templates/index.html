@@ -13,14 +13,44 @@
             font-family: 'Inter', sans-serif;
         }
 
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #007bff;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        #chat-wrapper {
+            width: 360px;
+            max-height: 90vh;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
         #chatbox {
-            background: #ffffff;
             padding: 15px;
-            border-radius: 10px;
-            width: 100%;
             height: 400px;
             overflow-y: auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             font-size: 15px;
         }
 
@@ -47,15 +77,6 @@
             float: left;
         }
 
-        #chat-wrapper {
-            width: 360px;
-            height: auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
         #input-area {
             display: flex;
             border-top: 1px solid #ddd;
@@ -75,23 +96,45 @@
             flex-grow: 1;
         }
 
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
+        #close-btn {
+            text-align: right;
+            padding: 5px 10px;
+            border-top: 1px solid #eee;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        #close-btn button {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Mobilki */
+        @media screen and (max-width: 480px) {
+            #chat-wrapper {
+                width: 95%;
+                right: 2.5%;
+                bottom: 80px;
+            }
+
+            #chatbox {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
+    <button id="chat-toggle">💬</button>
+
     <div id="chat-wrapper">
         <div id="chatbox"></div>
         <div id="input-area">
             <input id="userInput" placeholder="Zadaj pytanie..." />
             <button onclick="sendMessage()">Wyślij</button>
+        </div>
+        <div id="close-btn">
+            <button onclick="toggleChat()">Zamknij</button>
         </div>
     </div>
 </body>
