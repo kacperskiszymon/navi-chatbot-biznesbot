@@ -1,45 +1,43 @@
-function toggleChat() {
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleButton = document.getElementById("chat-toggle");
   const chatWrapper = document.getElementById("chat-wrapper");
-  if (chatWrapper.style.display === "flex") {
-    chatWrapper.style.display = "none";
-  } else {
-    chatWrapper.style.display = "flex";
-  }
-}
-
-function sendMessage() {
-  const input = document.getElementById("userInput");
-  const message = input.value.trim();
-  if (!message) return;
-
+  const userInput = document.getElementById("userInput");
   const chatbox = document.getElementById("chatbox");
 
-  // Dodaj wiadomość użytkownika
-  const userBubble = document.createElement("div");
-  userBubble.className = "bubble user-bubble";
-  userBubble.textContent = message;
-  chatbox.appendChild(userBubble);
-
-  input.value = "";
-
-  // Przewiń na dół
-  chatbox.scrollTop = chatbox.scrollHeight;
-
-  // Symuluj odpowiedź bota
-  fetch("/get", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ msg: message })
-  })
-  .then(response => response.json())
-  .then(data => {
-    const botBubble = document.createElement("div");
-    botBubble.className = "bubble bot-bubble";
-    botBubble.textContent = data.reply || "Brak odpowiedzi.";
-    chatbox.appendChild(botBubble);
-    chatbox.scrollTop = chatbox.scrollHeight;
-  })
-  .catch(err => {
-    console.error(err);
+  toggleButton.addEventListener("click", () => {
+    if (chatWrapper.style.display === "flex") {
+      chatWrapper.style.display = "none";
+    } else {
+      chatWrapper.style.display = "flex";
+    }
   });
-}
+
+  window.sendMessage = async function () {
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    appendMessage(message, "user");
+    userInput.value = "";
+
+    try {
+      const response = await fetch("/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ msg: message })
+      });
+
+      const data = await response.json();
+      appendMessage(data.reply || "Brak odpowiedzi.", "bot");
+    } catch (err) {
+      appendMessage("Błąd połączenia z serwerem.", "bot");
+    }
+  };
+
+  function appendMessage(text, sender) {
+    const bubble = document.createElement("div");
+    bubble.className = "bubble " + sender + "-bubble";
+    bubble.textContent = text;
+    chatbox.appendChild(bubble);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+});
